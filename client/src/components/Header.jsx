@@ -26,14 +26,14 @@ export default function Header() {
           className="hidden md:inline"
         />
       </form>
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
+      <Button className="w-12 h-10 flex md:hidden" color="gray" pill>
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 " color="gray" pill>
+        <Button className="w-12 h-10 hidden md:inline " color="gray" pill>
           <FaMoon />
         </Button>
-        <Link>
+        <Link to="/login">
           <Button gradientDuoTone="purpleToBlue" outline>
             Sign In
           </Button>
@@ -49,6 +49,11 @@ export default function Header() {
         </Navbar.Link>
         <Navbar.Link active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
+        </Navbar.Link>
+        <Navbar.Link as={"div"}>
+          <Button className="w-12 h-10 md:hidden" color="gray" pill>
+            <FaMoon />
+          </Button>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
