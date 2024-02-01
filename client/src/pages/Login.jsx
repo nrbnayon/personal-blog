@@ -18,6 +18,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import signUpImg from "../assets/logo.jpg";
+import OAuth from "../components/OAuth";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
@@ -119,14 +120,12 @@ export default function Login() {
                 "Login"
               )}
             </Button>
-            <Button type="connect" gradientDuoTone="purpleToBlue" outline>
-              Continue With Google
-            </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 mt-5 text-base">
-            <span>Don't Have an account?</span>
+            <span>Don&apos;t Have an account?</span>
             <Link to="/signup" className="text-blue-500 font-extrabold">
-              SignUp Now
+              Register Now
             </Link>
           </div>
           {errorMessage && (

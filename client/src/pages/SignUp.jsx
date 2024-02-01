@@ -2,6 +2,7 @@ import { Alert, Button, Card, Label, Spinner, TextInput } from "flowbite-react";
 import signUpImg from "../assets/4545.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import OAuth from "../components/OAuth";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -100,14 +101,7 @@ export default function SignUp() {
                 "Sign up"
               )}
             </Button>
-            <Button
-              type="connect"
-              gradientDuoTone="purpleToBlue"
-              outline
-              className="font-extrabold text-white"
-            >
-              Continue With Google
-            </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 mt-5 text-base">
             <span>Already Have an account?</span>
