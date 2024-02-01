@@ -1,8 +1,65 @@
-import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Label,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
+import Cookies from "js-cookie";
+
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import signUpImg from "../assets/logo.jpg";
-import { Link } from "react-router-dom";
 
 export default function Login() {
+  const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all required fields");
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+
+      setLoading(false);
+
+      if (res.ok) {
+        if (formData.remember) {
+          // Set a cookie with a user identifier or token
+          Cookies.set("rememberedUser", data.userIdentifier, { expires: 7 }); // expires in 7 days
+        }
+
+        navigate("/");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto flex justify-between items-center flex-col md:flex-row gap-8 mt-10">
       <div className="w-full">
@@ -12,16 +69,18 @@ export default function Login() {
       </div>
       <div className="w-full">
         <Card className="w-full">
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="email1" value="Your email" />
               </div>
               <TextInput
-                id="email1"
+                id="email"
                 type="email"
                 placeholder="user@example.com"
                 required
+                onChange={handleChange}
+                autocomplete="on"
               />
             </div>
             <div>
@@ -29,14 +88,21 @@ export default function Login() {
                 <Label htmlFor="password1" value="Your password" />
               </div>
               <TextInput
-                id="password1"
+                id="password"
                 type="password"
                 placeholder="******"
                 required
+                onChange={handleChange}
+                autocomplete="on"
               />
             </div>
             <div className="flex items-center gap-2">
-              <Checkbox id="remember" />
+              <Checkbox
+                id="remember"
+                onChange={(e) =>
+                  setFormData({ ...formData, remember: e.target.checked })
+                }
+              />
               <Label htmlFor="remember">Remember me</Label>
             </div>
             <Button
@@ -44,7 +110,14 @@ export default function Login() {
               gradientDuoTone="purpleToBlue"
               className="font-black text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 rounded-lg "
             >
-              Login
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-2 ">Loading...</span>
+                </>
+              ) : (
+                "Login"
+              )}
             </Button>
             <Button type="connect" gradientDuoTone="purpleToBlue" outline>
               Continue With Google
@@ -56,6 +129,11 @@ export default function Login() {
               SignUp Now
             </Link>
           </div>
+          {errorMessage && (
+            <Alert className="mt-0" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </Card>
       </div>
     </div>
