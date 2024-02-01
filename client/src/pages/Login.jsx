@@ -7,7 +7,13 @@ import {
   Spinner,
   TextInput,
 } from "flowbite-react";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -15,8 +21,8 @@ import signUpImg from "../assets/logo.jpg";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -25,13 +31,11 @@ export default function Login() {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all required fields");
+      return dispatch(signInFailure("Please fill out all required fields"));
     }
 
     try {
-      setLoading(true);
-      setErrorMessage(null);
-
+      dispatch(signInStart());
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,22 +45,18 @@ export default function Login() {
       const data = await res.json();
 
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
       }
 
-      setLoading(false);
-
       if (res.ok) {
-        if (formData.remember) {
-          // Set a cookie with a user identifier or token
-          Cookies.set("rememberedUser", data.userIdentifier, { expires: 7 }); // expires in 7 days
-        }
-
+        // if (formData.remember) {
+        //   Cookies.set("rememberedUser", data.userIdentifier, { expires: 7 }); // expires in 7 days
+        // }
+        dispatch(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      return dispatch(signInFailure(error.message));
     }
   };
 
@@ -80,7 +80,7 @@ export default function Login() {
                 placeholder="user@example.com"
                 required
                 onChange={handleChange}
-                autocomplete="on"
+                // autocomplete="on"
               />
             </div>
             <div>
@@ -93,15 +93,15 @@ export default function Login() {
                 placeholder="******"
                 required
                 onChange={handleChange}
-                autocomplete="on"
+                // autocomplete="on"
               />
             </div>
             <div className="flex items-center gap-2">
               <Checkbox
                 id="remember"
-                onChange={(e) =>
-                  setFormData({ ...formData, remember: e.target.checked })
-                }
+                // onChange={(e) =>
+                //   setFormData({ ...formData, remember: e.target.checked })
+                // }
               />
               <Label htmlFor="remember">Remember me</Label>
             </div>

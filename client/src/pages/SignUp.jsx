@@ -1,12 +1,4 @@
-import {
-  Alert,
-  Button,
-  Card,
-  Checkbox,
-  Label,
-  Spinner,
-  TextInput,
-} from "flowbite-react";
+import { Alert, Button, Card, Label, Spinner, TextInput } from "flowbite-react";
 import signUpImg from "../assets/4545.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
