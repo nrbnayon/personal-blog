@@ -1,7 +1,51 @@
-import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Label,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import signUpImg from "../assets/4545.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all required fields");
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/login");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto flex justify-between items-center flex-col md:flex-row gap-8 mt-10">
       <div className="w-full">
@@ -11,16 +55,17 @@ export default function SignUp() {
       </div>
       <div className="w-full">
         <Card className="w-full">
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="name" value="Your User Name" />
               </div>
               <TextInput
-                id="name"
+                id="username"
                 type="text"
-                placeholder="User Name"
+                placeholder="Username"
                 required
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -28,10 +73,11 @@ export default function SignUp() {
                 <Label htmlFor="email1" value="Your email" />
               </div>
               <TextInput
-                id="email1"
+                id="email"
                 type="email"
                 placeholder="user@example.com"
                 required
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -39,10 +85,12 @@ export default function SignUp() {
                 <Label htmlFor="password1" value="Your password" />
               </div>
               <TextInput
-                id="password1"
+                id="password"
                 type="password"
                 placeholder="******"
                 required
+                onChange={handleChange}
+                autoComplete="current-password"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -52,15 +100,23 @@ export default function SignUp() {
             <Button
               type="submit"
               gradientDuoTone="purpleToBlue"
-              className="font-black text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 rounded-lg "
+              disabled={loading}
+              className="font-extrabold text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 rounded-lg "
             >
-              Submit
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-2 ">Loading...</span>
+                </>
+              ) : (
+                "Sign up"
+              )}
             </Button>
             <Button
               type="connect"
               gradientDuoTone="purpleToBlue"
               outline
-              className="font-black text-white bg-gradient-to-r from-pink-300 via-purple-500 to-pink-500 rounded-lg "
+              className="font-extrabold text-white"
             >
               Continue With Google
             </Button>
@@ -71,6 +127,11 @@ export default function SignUp() {
               Login Now
             </Link>
           </div>
+          {errorMessage && (
+            <Alert className="mt-0" color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </Card>
       </div>
     </div>

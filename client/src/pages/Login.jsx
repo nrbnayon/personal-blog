@@ -46,12 +46,7 @@ export default function Login() {
             >
               Login
             </Button>
-            <Button
-              type="connect"
-              gradientDuoTone="purpleToBlue"
-              outline
-              className="font-black text-white bg-gradient-to-r from-pink-300 via-purple-500 to-pink-500 rounded-lg "
-            >
+            <Button type="connect" gradientDuoTone="purpleToBlue" outline>
               Continue With Google
             </Button>
           </form>
