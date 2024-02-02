@@ -103,15 +103,15 @@ export default function Header() {
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
         <Navbar.Link as={"div"}>
-          <Button
-            className="w-12 h-10 md:hidden"
+          <Link
+            className="flex items-center md:hidden"
             color="gray"
             pill
             onClick={() => dispatch(toggleTheme())}
           >
             {theme === "light" ? <FaSun /> : <FaMoon />}
             <span className="ml-2">Theme</span>
-          </Button>
+          </Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
