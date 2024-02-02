@@ -33,6 +33,7 @@ export default function Header() {
       <form>
         <TextInput
           type="text"
+          name="search"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
           className="hidden md:inline"
@@ -106,7 +107,6 @@ export default function Header() {
           <Link
             className="flex items-center md:hidden"
             color="gray"
-            pill
             onClick={() => dispatch(toggleTheme())}
           >
             {theme === "light" ? <FaSun /> : <FaMoon />}

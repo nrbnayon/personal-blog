@@ -40,7 +40,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="container mx-auto flex justify-between items-center flex-col md:flex-row gap-8 mt-10">
+    <div className="container mx-auto flex justify-between items-center flex-col md:flex-row gap-8 my-10">
       <div className="w-full">
         <Card className="p-0 m-0">
           <img src={signUpImg} className="rounded-lg" />
@@ -57,25 +57,27 @@ export default function SignUp() {
                 id="username"
                 type="text"
                 placeholder="Username"
+                autoComplete="username"
                 required
                 onChange={handleChange}
               />
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="email1" value="Your email" />
+                <Label htmlFor="email" value="Your email" />
               </div>
               <TextInput
                 id="email"
                 type="email"
                 placeholder="user@example.com"
+                autoComplete="username"
                 required
                 onChange={handleChange}
               />
             </div>
             <div>
               <div className="mb-2 block">
-                <Label htmlFor="password1" value="Your password" />
+                <Label htmlFor="password" value="Your password" />
               </div>
               <TextInput
                 id="password"

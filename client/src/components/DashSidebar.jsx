@@ -2,12 +2,10 @@ import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  HiArrowSmRight,
   HiChartPie,
   HiInbox,
   HiLogout,
   HiShoppingBag,
-  HiTable,
   HiUser,
   HiViewBoards,
 } from "react-icons/hi";
@@ -32,13 +30,11 @@ export default function DashSidebar() {
               icon={HiUser}
               label={"User"}
               labelColor="dark"
+              as="div"
             >
               Profile
             </Sidebar.Item>
           </Link>
-          <Sidebar.Item icon={HiLogout} className="cursor-pointer">
-            Sign out
-          </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiChartPie}>
             Dashboard
           </Sidebar.Item>
@@ -52,11 +48,8 @@ export default function DashSidebar() {
           <Sidebar.Item href="#" icon={HiShoppingBag}>
             Products
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiArrowSmRight}>
-            Sign In
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTable}>
-            Sign Up
+          <Sidebar.Item icon={HiLogout} className="cursor-pointer">
+            Sign out
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
