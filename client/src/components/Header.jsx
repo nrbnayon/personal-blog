@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon } from "react-icons/fa";
+import { FaMoon, FaSun } from "react-icons/fa";
 import {
   HiUser,
   HiCog,
@@ -9,10 +9,13 @@ import {
   HiLogout,
   HiViewGrid,
 } from "react-icons/hi";
-import { useSelector } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Header() {
   const path = useLocation().pathname;
+  const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
   const { currentUser } = useSelector((state) => state.user);
   return (
     <Navbar className="border-b-2 sticky top-0 z-50">
@@ -39,8 +42,13 @@ export default function Header() {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden md:inline " color="gray" pill>
-          <FaMoon />
+        <Button
+          className="w-12 h-10 hidden md:inline "
+          color="gray"
+          pill
+          onClick={() => dispatch(toggleTheme())}
+        >
+          {theme === "light" ? <FaSun /> : <FaMoon />}
         </Button>
         {currentUser ? (
           <Dropdown
@@ -68,7 +76,10 @@ export default function Header() {
             <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
             <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
             <Dropdown.Item icon={HiOutlineBriefcase}>Projects</Dropdown.Item>
-            <Dropdown.Item icon={FaMoon}>Change Mood</Dropdown.Item>
+            <Dropdown.Item onClick={() => dispatch(toggleTheme())}>
+              {theme === "light" ? <FaSun /> : <FaMoon />}{" "}
+              <span className="ml-2">Theme</span>
+            </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item icon={HiLogout}>Sign out</Dropdown.Item>
           </Dropdown>
@@ -92,8 +103,14 @@ export default function Header() {
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
         <Navbar.Link as={"div"}>
-          <Button className="w-12 h-10 md:hidden" color="gray" pill>
-            <FaMoon />
+          <Button
+            className="w-12 h-10 md:hidden"
+            color="gray"
+            pill
+            onClick={() => dispatch(toggleTheme())}
+          >
+            {theme === "light" ? <FaSun /> : <FaMoon />}
+            <span className="ml-2">Theme</span>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
