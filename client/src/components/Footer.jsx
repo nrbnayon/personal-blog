@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 export default function FooterComponet() {
   return (
     <Footer container bgDark className="border border-t-8 border-teal-500">
-      <div className="w-full">
-        <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
+      <div className="container mx-auto w-full">
+        <div className="grid w-full grid-cols-2 gap-8 py-8 md:grid-cols-4 lg:flex justify-between">
           <div>
             <Footer.Title title="Follow" />
             <Link
@@ -22,7 +22,7 @@ export default function FooterComponet() {
         "
             >
               <span className="text-white px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 rounded-lg ">
-                Nayon's
+                Nayon&apos;s
               </span>
               Blog
             </Link>
